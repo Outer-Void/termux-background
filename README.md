@@ -109,3 +109,14 @@ may be required: `./gradlew -Pandroid.aapt2FromMavenOverride=/path/to/native/aap
 Debug builds are debuggable test APKs with application ID `com.termuxbackground.test`,
 version suffix `-test`, and label “Termux Background Test”. They can coexist with
 the production app and require their own Termux command permission grant.
+
+## License
+
+**Outer-Void Proprietary License** (proprietary). Copyright (c) 2026 Outer-Void / Justadudeinspace (JADIS). All rights reserved. See [LICENSE](LICENSE).
+
+Copies and releases obtained before 2026-10-25 remain available under the MIT License they were
+published with; every change and release from that date on is proprietary.
+
+Third-party components keep their own licenses; see [THIRD_PARTY_NOTICES](THIRD_PARTY_NOTICES.md) and `licenses/`.
+
+Contact: outervoid.blux@gmail.com (main) · theoutervoid@outlook.com (fallback)

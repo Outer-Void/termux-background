@@ -1,8 +1,103 @@
-MIT License
+Outer-Void Proprietary License
+==============================
 
-Copyright (c) 2025 Termux Background
+Copyright (c) 2026 Outer-Void / Justadudeinspace (JADIS). All rights reserved.
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files...
+Organization: Outer-Void
+Owner: Justadudeinspace (JADIS)
+Main email: outervoid.blux@gmail.com
+Fallback email: theoutervoid@outlook.com
 
-(standard MIT license text shortened for brevity)
+
+Grant of License
+----------------
+This software and associated documentation files (the "Software") are proprietary to the
+copyright holder.
+
+No rights are granted to any person or entity to use, copy, modify, merge, publish,
+distribute, sublicense, create derivative works of, or sell copies of the Software,
+except as expressly permitted in a written agreement signed by the copyright holder.
+
+
+Public Visibility
+-----------------
+Where the Software is published in a publicly viewable location, you may view it there and
+make the transient copies necessary for viewing. Public visibility is not a license to use,
+modify or redistribute the Software.
+
+
+Restrictions
+------------
+The following actions are expressly prohibited unless prior written permission is
+obtained from the copyright holder:
+
+- Redistribution, sublicensing, sale, or transfer of the Software or any derivative works.
+- Public or private hosting of the Software or derivative works.
+- Reverse engineering, decompilation, or disassembly of the Software, except to the extent
+  such restriction is prohibited by applicable law.
+- Removal, alteration, or obfuscation of copyright, trademark, license, attribution or
+  provenance notices.
+- Use of the Software to train, fine-tune, or evaluate machine learning or artificial
+  intelligence models without explicit written permission.
+
+
+Third-Party Material
+--------------------
+Components owned by others remain under their own licenses. Where present, they are listed in
+THIRD_PARTY_NOTICES.md (or NOTICE) and reproduced under licenses/, or carry their own license
+headers. Those licenses govern those components and are not narrowed or replaced by this
+License. No ownership is claimed over third-party material.
+
+Previously Published Versions
+-----------------------------
+Before 2026-10-25 this repository was designated under the MIT License. Copies and releases
+obtained before that date remain available under the MIT License for those copies; that grant is
+not withdrawn. This License applies to every change, version and release made on or after 2026-10-25.
+
+
+Ownership
+---------
+The Software is licensed, not sold.
+
+All right, title, and interest in and to the Outer-Void-authored portions of the Software,
+including but not limited to all copyrights, trade secrets, and proprietary rights, remain
+exclusively with the copyright holder.
+
+
+Termination
+-----------
+Any violation of this License immediately and automatically terminates all rights
+granted to the Licensee.
+
+Upon termination, the Licensee must immediately cease all use of the Software and destroy
+all copies of the Software in their possession or control.
+
+
+Warranty Disclaimer
+-------------------
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+PURPOSE, AND NON-INFRINGEMENT.
+
+THE ENTIRE RISK ARISING OUT OF THE USE OR PERFORMANCE OF THE SOFTWARE REMAINS WITH THE USER.
+
+
+Limitation of Liability
+-----------------------
+IN NO EVENT SHALL THE COPYRIGHT HOLDER BE LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER LIABILITY,
+WHETHER IN AN ACTION OF CONTRACT, TORT, OR OTHERWISE, ARISING FROM, OUT OF, OR IN CONNECTION
+WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+
+Governing Law
+-------------
+This License shall be governed by and construed in accordance with applicable law,
+without regard to conflict of law principles.
+
+
+Contact
+-------
+For licensing inquiries or permission requests, contact:
+
+outervoid.blux@gmail.com (main)
+theoutervoid@outlook.com (fallback)

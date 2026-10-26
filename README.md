@@ -1,9 +1,10 @@
 # Termux Background
 
-[![Android and Debian builds](https://github.com/Justadudeinspace/termux-background/actions/workflows/build.yml/badge.svg)](https://github.com/Justadudeinspace/termux-background/actions/workflows/build.yml)
+[![Android and Debian builds](https://github.com/Outer-Void/termux-background/actions/workflows/build.yml/badge.svg)](https://github.com/Outer-Void/termux-background/actions/workflows/build.yml)
 
-**Test/Debug Build Under Actions**
-*(v1.0.0 Not Operational, go to "Actions," select latest successful build, download Artifact, Unzip for Test/Debug Apk)*
+**Version 1.1.0 (`VERSION`): test/debug builds only, not released and not device-qualified.** CI builds
+test APK and DEB artifacts (Actions → latest successful build → artifact). No device has passed the
+[device checklist](docs/DEVICE_RC_CHECKLIST.md) yet. This is a standalone utility; it does not use BLUX.
 
 Termux Background provides an Android controller and a Termux CLI. The companion
 uses Termux's supported RUN_COMMAND interface to invoke the CLI; all configuration
@@ -35,7 +36,7 @@ and reload, not rendering.
 
 ## Install
 
-Install the APK from a project release or build it yourself:
+There is no published release yet. Install a CI test build, or build the APK yourself:
 
 ```sh
 adb install termux-background-1.1.0-test.apk

@@ -2,8 +2,9 @@
 
 [![Android and Debian builds](https://github.com/Outer-Void/termux-background/actions/workflows/build.yml/badge.svg)](https://github.com/Outer-Void/termux-background/actions/workflows/build.yml)
 
-**Version 1.1.0 (`VERSION`): test/debug builds only, not released and not device-qualified.** CI builds
-test APK and DEB artifacts (Actions → latest successful build → artifact). No device has passed the
+**Version 1.1.0 (`VERSION`): test/debug builds only, not released and not device-qualified.** CI is set up to
+build test APK and DEB artifacts (Actions → latest successful build → artifact), but as of 2026-10-27 no
+Outer-Void Actions job starts (account billing lock), so build locally (below). No device has passed the
 [device checklist](docs/DEVICE_RC_CHECKLIST.md) yet. This is a standalone utility; it does not use BLUX.
 
 Termux Background provides an Android controller and a Termux CLI. The companion
@@ -39,7 +40,7 @@ and reload, not rendering.
 There is no published release yet. Install a CI test build, or build the APK yourself:
 
 ```sh
-adb install termux-background-1.1.0-test.apk
+adb install termux-background-1.1.0-debug.apk     # CI artifact name; a local build is app/build/outputs/apk/debug/app-debug.apk
 ```
 
 Install the Debian package from inside Termux:
@@ -80,7 +81,7 @@ The companion also uses `probe` (protocol 1) and `set --image-stdin` with bounde
 Requires JDK 17 and Android SDK platform/build tools 35:
 
 ```sh
-git clone https://github.com/Justadudeinspace/termux-background.git
+git clone git@github.com:Outer-Void/termux-background.git
 cd termux-background
 ./gradlew clean assembleDebug
 ./gradlew assembleRelease
@@ -89,6 +90,18 @@ cd termux-background
 ```
 
 Release APKs are unsigned unless signing credentials are supplied externally. Set `ANDROID_KEYSTORE_PATH`, `ANDROID_KEYSTORE_PASSWORD`, `ANDROID_KEY_ALIAS`, and `ANDROID_KEY_PASSWORD` in the environment. Never commit keystores or credentials. GitHub Actions accepts the same values through repository secrets (`ANDROID_KEYSTORE_BASE64` for the keystore file). The previously committed signing key is removed and must be considered compromised; apps signed with a replacement key cannot update installations signed by that old key, so those installations must be uninstalled before installing a newly signed build.
+
+## Uninstall
+
+Removing the package does not touch your Termux settings, so restore them first:
+
+```sh
+termux-background --backend monet reset      # or `termux-background reset` for the legacy backend
+dpkg -r termux-background
+```
+
+Then uninstall the companion app from Android settings. If you enabled `allow-external-apps=true` only for
+this app, set it back to `false` in `~/.termux/termux.properties` and run `termux-reload-settings`.
 
 ## Troubleshooting
 

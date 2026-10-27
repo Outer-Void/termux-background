@@ -4,6 +4,8 @@ ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 CLI="$ROOT/termux-background-deb/data/data/com.termux/files/usr/bin/termux-background"
 TMP="$(mktemp -d)"
 trap 'rm -rf "$TMP"' EXIT
+# `! cmd` never trips `set -e`, so negative assertions go through refute.
+refute() { if "$@"; then printf 'unexpectedly succeeded: %s\n' "$*" >&2; exit 1; fi; }
 mkdir -p "$TMP/bin" "$TMP/config"
 printf '#!/bin/sh\nexit 0\n' > "$TMP/bin/termux-reload-settings"
 chmod +x "$TMP/bin/termux-reload-settings"
@@ -11,7 +13,8 @@ chmod +x "$TMP/bin/termux-reload-settings"
 printf '%s' 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+/pXcAAAAASUVORK5CYII=' | base64 -d > "$TMP/image.png"
 printf '# keep this\nfont=JetBrainsMono\nbackground.opacity=0.3\n' > "$TMP/config/termux.properties"
 export PATH="$TMP/bin:$PATH" TERMUX_BACKGROUND_CONFIG_DIR="$TMP/config"
-export TERMUX_BACKGROUND_VERSION="$(cat "$ROOT/VERSION")"
+TERMUX_BACKGROUND_VERSION="$(cat "$ROOT/VERSION")"
+export TERMUX_BACKGROUND_VERSION
 bash "$CLI" set --image "$TMP/image.png" --opacity 0.65 --blur true --animation scroll
 [[ "$(cat "$TMP/config/termux.properties")" == *'font=JetBrainsMono'* ]]
 grep -q '^background.opacity=0.65$' "$TMP/config/termux.properties"
@@ -19,7 +22,7 @@ grep -q '^background.animation=scroll$' "$TMP/config/termux.properties"
 [[ -f "$TMP/config/background.png" ]]
 bash "$CLI" reset
 grep -q '^font=JetBrainsMono$' "$TMP/config/termux.properties"
-! grep -q '^background\.' "$TMP/config/termux.properties"
+refute grep -q '^background\.' "$TMP/config/termux.properties"
 [[ ! -e "$TMP/config/background.png" ]]
 if bash "$CLI" set --image "$TMP/image.png" --opacity 2 >/dev/null 2>&1; then
   printf 'invalid opacity unexpectedly accepted\n' >&2; exit 1
@@ -61,7 +64,7 @@ fi
 [[ -z "$(find "$TMP/config" -name '.transfer.*' -o -name '.background.*' -o -name '.termux.properties.*')" ]]
 printf '# preserved\n  background.opacity =0.2\nfont=keep\n' > "$TMP/config/termux.properties"
 bash "$CLI" set --image "$TMP/image.png"
-! grep -q '^  background.opacity' "$TMP/config/termux.properties"
+refute grep -q '^  background.opacity' "$TMP/config/termux.properties"
 grep -q '^font=keep$' "$TMP/config/termux.properties"
 printf '#!/bin/sh\nexit 1\n' > "$TMP/bin/termux-reload-settings"
 if bash "$CLI" reload >/dev/null 2>&1; then exit 1; else [[ $? -eq 6 ]]; fi
@@ -85,7 +88,7 @@ bash "$CLI" --backend monet reset
 [[ ! -e "$TMP/config/background/background_portrait.jpeg" ]]
 [[ ! -e "$TMP/config/background/background_landscape.jpeg" ]]
 [[ ! -e "$TMP/config/.termux-background-monet" ]]
-! grep -q '^background-overlay-color=' "$TMP/config/termux.properties"
+refute grep -q '^background-overlay-color=' "$TMP/config/termux.properties"
 grep -q '^font=keep$' "$TMP/config/termux.properties"
 grep -q '^background.opacity=0.6$' "$TMP/config/termux.properties"
 printf 'Monet backend regression tests passed\n'

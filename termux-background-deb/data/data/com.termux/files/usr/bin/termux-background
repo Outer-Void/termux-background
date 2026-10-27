@@ -79,7 +79,7 @@ atomic_properties() {
     printf '\n# Managed by termux-background\nbackground=background.png\nbackground.opacity=%s\nbackground.blur=%s\nbackground.animation=%s\n' "$opacity" "$blur" "$animation" >> "$tmp" || err 'cannot write background properties' 5
     fi
   fi
-  chmod 600 "$tmp" && mv -f "$tmp" "$PROP_FILE" || { rm -f "$tmp"; err 'cannot replace termux.properties' 5; }
+  if ! { chmod 600 "$tmp" && mv -f "$tmp" "$PROP_FILE"; }; then rm -f "$tmp"; err 'cannot replace termux.properties' 5; fi
 }
 reload() {
   command -v termux-reload-settings >/dev/null 2>&1 || err 'termux-reload-settings is unavailable' 3
@@ -179,7 +179,7 @@ fi
 mkdir -p "$CONFIG_DIR" || err "cannot create $CONFIG_DIR" 5
 image_tmp=$(mktemp "$CONFIG_DIR/.background.XXXXXX") || err 'cannot create image temporary file' 5
 cp -- "$image" "$image_tmp" || { rm -f "$image_tmp"; err 'image copy failed' 4; }
-chmod 600 "$image_tmp" && mv -f "$image_tmp" "$BG_FILE" || { rm -f "$image_tmp"; err 'cannot install background image' 5; }
+if ! { chmod 600 "$image_tmp" && mv -f "$image_tmp" "$BG_FILE"; }; then rm -f "$image_tmp"; err 'cannot install background image' 5; fi
 if [[ "$backend" == monet ]]; then
   # Monet regenerates orientation caches from the original on reload/resume.
   rm -f -- "$CONFIG_DIR/background/background_portrait.jpeg" "$CONFIG_DIR/background/background_landscape.jpeg" || err 'cannot invalidate Monet wallpaper cache' 5

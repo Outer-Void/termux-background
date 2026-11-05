@@ -37,7 +37,13 @@ and reload, not rendering.
 
 ## Install
 
-There is no published release yet. Install a CI test build, or build the APK yourself:
+There is no current release of 1.1.0. Install a CI test build, or build the APK yourself (below).
+
+The GitHub Releases page still lists four historical builds from 2025-07-31 (`v1.0.0`, `v1.0.1`, `v1.0.3`,
+`version-1.0.0`). They predate the 2026 rebuild, are unsupported, and have open reports that the app closes when
+tapped. They are signed with certificate SHA-256 `7bd3603d…ab4a`, which is **not** the compromised key described
+under Signing (checked 2026-11-04).
+
 
 ```sh
 adb install termux-background-1.1.0-debug.apk     # CI artifact name; a local build is app/build/outputs/apk/debug/app-debug.apk

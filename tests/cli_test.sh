@@ -96,3 +96,22 @@ printf 'background-overlay-color=#12345678\nfont=keep\n' > "$TMP/config/termux.p
 bash "$CLI" --backend monet reset
 grep -q '^background-overlay-color=#12345678$' "$TMP/config/termux.properties"
 printf 'Unmanaged Monet settings preserved\n'
+
+# F57 (OV-59): if writing the properties fails after the image was installed, the previous image comes back
+# (or, with no previous image, the new one is removed), so image and properties never disagree.
+rm -rf "$TMP/config"; mkdir -p "$TMP/config"
+printf 'font=keep\n' > "$TMP/config/termux.properties"
+bash "$CLI" set --image "$TMP/image.png" --opacity 0.5
+cp "$TMP/image.png" "$TMP/second.png"; printf 'second' >> "$TMP/second.png"
+chmod 000 "$TMP/config/termux.properties"
+if bash "$CLI" set --image "$TMP/second.png" --opacity 0.9 2>"$TMP/err"; then exit 1; else [[ $? -eq 5 ]]; fi
+chmod 600 "$TMP/config/termux.properties"
+grep -q 'previous background was restored' "$TMP/err"
+cmp -s "$TMP/image.png" "$TMP/config/background.png"
+grep -q '^background.opacity=0.5$' "$TMP/config/termux.properties"
+refute ls "$TMP/config"/.background.* 2>/dev/null
+rm -f "$TMP/config/background.png"; printf 'font=keep\n' > "$TMP/config/termux.properties"; chmod 000 "$TMP/config/termux.properties"
+if bash "$CLI" set --image "$TMP/second.png" 2>/dev/null; then exit 1; fi
+chmod 600 "$TMP/config/termux.properties"
+refute test -e "$TMP/config/background.png"
+printf 'Image rollback on a failed properties write passed\n'

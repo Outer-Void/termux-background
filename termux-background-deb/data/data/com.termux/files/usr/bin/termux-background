@@ -3,9 +3,23 @@ set -euo pipefail
 umask 077
 transfer_tmp=""
 image_tmp=""; properties_tmp=""
+# F57: `set` installs the image before writing properties. Until the properties are committed, a failure
+# restores the previous image (or removes the new one) so image and properties never disagree.
+previous_image=""; image_installed=false; properties_committed=false; marker_created=false
+rollback_image() {
+  [[ "$image_installed" == true && "$properties_committed" == false ]] || return 0
+  if [[ -n "$previous_image" && -f "$previous_image" ]]; then
+    mv -f -- "$previous_image" "$BG_FILE" && previous_image=""
+  else
+    rm -f -- "$BG_FILE"
+  fi
+  [[ "$marker_created" == false ]] || rm -f -- "$CONFIG_DIR/.termux-background-monet"
+  printf 'termux-background: the previous background was restored\n' >&2
+}
 cleanup() {
   local rc=$? candidate
-  for candidate in "$transfer_tmp" "$image_tmp" "$properties_tmp"; do
+  if [[ $rc != 0 ]]; then rollback_image || printf 'termux-background: background rollback failed\n' >&2; fi
+  for candidate in "$transfer_tmp" "$image_tmp" "$properties_tmp" "$previous_image"; do
     if [[ -n "$candidate" ]] && ! rm -f -- "$candidate"; then
       printf 'termux-background: temporary file cleanup failed\n' >&2
       [[ $rc != 0 ]] || rc=7
@@ -179,12 +193,19 @@ fi
 mkdir -p "$CONFIG_DIR" || err "cannot create $CONFIG_DIR" 5
 image_tmp=$(mktemp "$CONFIG_DIR/.background.XXXXXX") || err 'cannot create image temporary file' 5
 cp -- "$image" "$image_tmp" || { rm -f "$image_tmp"; err 'image copy failed' 4; }
+if [[ -f "$BG_FILE" ]]; then
+  previous_image=$(mktemp "$CONFIG_DIR/.background.previous.XXXXXX") || err 'cannot keep the previous image' 5
+  cp -p -- "$BG_FILE" "$previous_image" || err 'cannot keep the previous image' 5
+fi
 if ! { chmod 600 "$image_tmp" && mv -f "$image_tmp" "$BG_FILE"; }; then rm -f "$image_tmp"; err 'cannot install background image' 5; fi
+image_installed=true
 if [[ "$backend" == monet ]]; then
   # Monet regenerates orientation caches from the original on reload/resume.
   rm -f -- "$CONFIG_DIR/background/background_portrait.jpeg" "$CONFIG_DIR/background/background_landscape.jpeg" || err 'cannot invalidate Monet wallpaper cache' 5
+  [[ -f "$CONFIG_DIR/.termux-background-monet" ]] || marker_created=true
   printf 'monet\n' > "$CONFIG_DIR/.termux-background-monet" || err 'cannot write Monet ownership marker' 5
 fi
 atomic_properties set "$opacity" "$blur" "$animation"
+properties_committed=true
 reload
 printf 'Background set and settings reloaded\n'
